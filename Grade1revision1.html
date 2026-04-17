@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<!-- saved from url=(0079)file:///C:/Users/pierr/Downloads/Grade1_Revision1_Balmoral_April2026%20(1).html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Revision: Ordering &amp; Before/After/Between</title>
+<link href="file:///C:/Users/pierr/Downloads/Grade1revision1_files/css2" rel="stylesheet">
+<style>
+:root{
+  --pink:#f472b6;--pink-light:#fbcfe8;--pink-dark:#db2777;
+  --coral:#fb7185;--peach:#fecdd3;
+  --purple:#a855f7;--purple-light:#e9d5ff;
+  --green:#22c55e;--green-light:#bbf7d0;
+  --red:#ef4444;--red-light:#fecaca;
+  --yellow:#fbbf24;--yellow-light:#fef3c7;
+  --blue:#3b82f6;
+  --white:#ffffff;--text-dark:#4a1942;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Nunito',sans-serif;background:linear-gradient(135deg,#fce4ec,#f8bbd0,#f48fb1);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:12px}
+#app{width:100%;max-width:540px;border-radius:28px;overflow:hidden;box-shadow:0 16px 50px rgba(219,39,119,0.3);position:relative}
+
+/* PASSWORD */
+#pw-screen{padding:36px 24px;text-align:center;background:linear-gradient(160deg,#fce4ec,#f8bbd0)}
+#pw-screen h1{font-family:'Fredoka One',cursive;color:var(--pink-dark);font-size:1.6em;margin-bottom:4px}
+#pw-screen .pw-sub{color:#9d174d;font-weight:700;font-size:0.95em;margin-bottom:20px}
+.pw-icons{font-size:3em;margin-bottom:12px}
+#pw-input{width:100%;padding:13px;border:3px solid var(--pink);border-radius:14px;font-family:'Nunito',sans-serif;font-size:1.1em;text-align:center;outline:none;letter-spacing:3px;font-weight:800}
+#pw-input:focus{border-color:var(--pink-dark);box-shadow:0 0 0 4px rgba(244,114,182,0.2)}
+.pw-btn{margin-top:14px;padding:13px 44px;background:linear-gradient(135deg,var(--pink),var(--coral));color:white;border:none;border-radius:50px;font-family:'Fredoka One',cursive;font-size:1.1em;cursor:pointer;box-shadow:0 5px 18px rgba(244,114,182,0.4)}
+.pw-btn:hover{transform:scale(1.05)}
+#pw-error{color:var(--red);font-weight:700;margin-top:10px;display:none}
+
+/* SOUND SCREEN */
+#sound-screen{display:none;padding:36px 24px;text-align:center;background:linear-gradient(160deg,#fce4ec,#f8bbd0)}
+#sound-screen h2{font-family:'Fredoka One',cursive;color:var(--pink-dark);font-size:1.4em;margin-bottom:10px}
+#sound-screen p{color:#9d174d;font-weight:600;margin-bottom:18px;line-height:1.5}
+.snd-btn{padding:16px 44px;border:none;border-radius:50px;font-family:'Fredoka One',cursive;font-size:1.15em;cursor:pointer;display:block;width:80%;margin:8px auto}
+.snd-on{background:linear-gradient(135deg,var(--green),#16a34a);color:white;box-shadow:0 5px 18px rgba(34,197,94,0.4)}
+.snd-off{background:var(--white);color:var(--pink-dark);border:2px solid var(--pink)}
+
+/* MAIN ACTIVITY AREA */
+#activity-area{display:none;background:linear-gradient(180deg,#fce4ec,#fdf2f8,#fff1f2);padding:22px 18px;min-height:420px}
+.section-title{font-family:'Fredoka One',cursive;color:var(--pink-dark);font-size:1.35em;text-align:center;margin-bottom:6px}
+.section-instruction{text-align:center;color:var(--text-dark);font-weight:700;font-size:1em;margin-bottom:16px;line-height:1.5;padding:0 8px}
+
+/* SCORE BAR */
+#score-bar{background:linear-gradient(90deg,var(--pink-light),var(--peach));padding:8px 18px;display:none;text-align:center;font-family:'Fredoka One',cursive;color:var(--pink-dark);font-size:0.95em;border-bottom:2px solid rgba(244,114,182,0.2)}
+
+/* ORDERING ACTIVITIES */
+.num-row{display:flex;justify-content:center;gap:10px;margin-bottom:16px;flex-wrap:wrap}
+.num-chip{
+  width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;
+  font-family:'Fredoka One',cursive;font-size:1.6em;color:var(--white);cursor:pointer;
+  background:linear-gradient(135deg,var(--pink),var(--coral));
+  box-shadow:0 4px 12px rgba(244,114,182,0.3);transition:all 0.2s;position:relative;
+  user-select:none;
+}
+.num-chip:hover{transform:scale(1.08)}
+.num-chip.used{opacity:0.4;cursor:default;text-decoration:line-through;pointer-events:none}
+.num-chip.used::after{content:'';position:absolute;left:8px;right:8px;top:50%;height:3px;background:var(--text-dark);border-radius:2px}
+
+.box-row{display:flex;justify-content:center;gap:8px;margin-bottom:14px}
+.order-box{
+  width:52px;height:52px;border:3px dashed var(--pink);border-radius:14px;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Fredoka One',cursive;font-size:1.5em;color:var(--pink-dark);
+  background:rgba(255,255,255,0.7);transition:all 0.3s;
+}
+.order-box.filled{border-style:solid;background:var(--white);box-shadow:0 2px 8px rgba(0,0,0,0.1)}
+
+.check-btn{
+  display:block;margin:10px auto;padding:12px 40px;
+  background:linear-gradient(135deg,var(--purple),#7c3aed);color:white;border:none;border-radius:50px;
+  font-family:'Fredoka One',cursive;font-size:1.1em;cursor:pointer;
+  box-shadow:0 4px 14px rgba(168,85,247,0.3);transition:all 0.2s;
+}
+.check-btn:hover{transform:scale(1.05)}
+.check-btn:disabled{opacity:0.5;cursor:default;transform:none}
+
+.undo-btn{
+  display:block;margin:6px auto;padding:8px 28px;
+  background:var(--white);color:var(--pink-dark);border:2px solid var(--pink);border-radius:50px;
+  font-family:'Fredoka One',cursive;font-size:0.85em;cursor:pointer;
+}
+
+/* RESULT MESSAGE */
+.result-msg{
+  text-align:center;font-family:'Fredoka One',cursive;font-size:1.15em;
+  padding:10px;border-radius:14px;margin-top:10px;
+}
+.result-correct{background:var(--green-light);color:#166534}
+.result-wrong{background:var(--red-light);color:#991b1b}
+
+/* INPUT ACTIVITIES */
+.input-activity{max-width:300px;margin:0 auto}
+.input-row{display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:12px;font-family:'Fredoka One',cursive;font-size:1.5em;color:var(--text-dark)}
+.input-box{
+  width:50px;height:50px;border:3px solid var(--pink);border-radius:12px;
+  text-align:center;font-family:'Fredoka One',cursive;font-size:1.2em;
+  outline:none;color:var(--text-dark);background:var(--white);
+}
+.input-box:focus{border-color:var(--purple);box-shadow:0 0 0 3px rgba(168,85,247,0.2)}
+.input-box.correct{border-color:var(--green);background:var(--green-light);color:#166534}
+.input-box.wrong{border-color:var(--red);background:var(--red-light);color:#991b1b}
+.input-box:disabled{opacity:1}
+
+.check-all-btn{
+  display:block;margin:14px auto;padding:12px 40px;
+  background:linear-gradient(135deg,var(--purple),#7c3aed);color:white;border:none;border-radius:50px;
+  font-family:'Fredoka One',cursive;font-size:1.1em;cursor:pointer;
+  box-shadow:0 4px 14px rgba(168,85,247,0.3);
+}
+.check-all-btn:disabled{opacity:0.5;cursor:default}
+
+/* CONTINUE BUTTON */
+.continue-btn{
+  display:block;margin:14px auto 0;padding:12px 36px;
+  background:linear-gradient(135deg,var(--pink),var(--coral));color:white;border:none;border-radius:50px;
+  font-family:'Fredoka One',cursive;font-size:1.05em;cursor:pointer;
+  box-shadow:0 4px 14px rgba(244,114,182,0.3);
+}
+.continue-btn:hover{transform:scale(1.05)}
+
+/* PROGRESS */
+#progress-bar{height:6px;background:#fce4ec}
+#progress-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--pink),var(--coral));transition:width 0.5s;border-radius:0 3px 3px 0}
+
+/* END SCREEN */
+#end-screen{display:none;padding:28px 22px;text-align:center;background:linear-gradient(180deg,#fef3c7,#fce7f3)}
+#end-screen h2{font-family:'Fredoka One',cursive;color:var(--pink-dark);font-size:1.7em;margin-bottom:8px}
+.final-score{font-family:'Fredoka One',cursive;font-size:2.2em;color:var(--purple);margin:10px 0}
+.stars-row{font-size:2.5em;margin:8px 0}
+#parent-end-note{
+  background:linear-gradient(135deg,#fef3c7,#fff7ed);border-radius:18px;padding:18px;
+  margin:14px 0;border:2px solid var(--yellow);font-size:0.93em;color:var(--text-dark);
+  line-height:1.6;text-align:left;
+}
+.feedback-link{
+  display:inline-block;padding:13px 32px;
+  background:linear-gradient(135deg,var(--pink),var(--coral));color:white!important;
+  border-radius:50px;font-family:'Fredoka One',cursive;font-size:1em;text-decoration:none;
+  box-shadow:0 5px 18px rgba(244,114,182,0.35);margin-top:12px;
+}
+.feedback-link:hover{transform:scale(1.05)}
+.restart-btn{
+  margin-top:10px;padding:10px 28px;background:var(--white);color:var(--pink-dark);
+  border:2px solid var(--pink);border-radius:50px;font-family:'Fredoka One',cursive;
+  font-size:0.9em;cursor:pointer;
+}
+
+@media(max-width:380px){
+  .num-chip,.order-box{width:44px;height:44px;font-size:1.3em}
+  .input-row{font-size:1.3em}
+  .input-box{width:44px;height:44px;font-size:1.1em}
+}
+</style>
+<style>.driver-active .driver-overlay,.driver-active *{pointer-events:none}.driver-active .driver-active-element,.driver-active .driver-active-element *,.driver-popover,.driver-popover *{pointer-events:auto}@keyframes animate-fade-in{0%{opacity:0}to{opacity:1}}.driver-fade .driver-overlay{animation:animate-fade-in .2s ease-in-out}.driver-fade .driver-popover{animation:animate-fade-in .2s}.driver-popover{all:unset;box-sizing:border-box;color:#2d2d2d;margin:0;padding:15px;border-radius:5px;min-width:250px;max-width:300px;box-shadow:0 1px 10px rgba(0,0,0,.4);z-index:1000000000;position:fixed;top:0;right:0;background-color:#fff}.driver-popover *{font-family:Helvetica Neue,Inter,ui-sans-serif,"Apple Color Emoji",Helvetica,Arial,sans-serif}.driver-popover-title{font:19px/normal sans-serif;font-weight:700;display:block;position:relative;line-height:1.5;zoom:1;margin:0}.driver-popover-close-btn{all:unset;position:absolute;top:0;right:0;width:32px;height:28px;cursor:pointer;font-size:18px;font-weight:500;color:#d2d2d2;z-index:1;text-align:center;transition:color;transition-duration:.2s}.driver-popover-close-btn:hover,.driver-popover-close-btn:focus{color:#2d2d2d}.driver-popover-title[style*=block]+.driver-popover-description{margin-top:5px}.driver-popover-description{margin-bottom:0;font:14px/normal sans-serif;line-height:1.5;font-weight:400;zoom:1}.driver-popover-footer{margin-top:15px;text-align:right;zoom:1;display:flex;align-items:center;justify-content:space-between}.driver-popover-progress-text{font-size:13px;font-weight:400;color:#727272;zoom:1}.driver-popover-footer button{all:unset;display:inline-block;box-sizing:border-box;padding:3px 7px;text-decoration:none;text-shadow:1px 1px 0 #fff;background-color:#fff;color:#2d2d2d;font:12px/normal sans-serif;cursor:pointer;outline:0;zoom:1;line-height:1.3;border:1px solid #ccc;border-radius:3px}.driver-popover-footer .driver-popover-btn-disabled{opacity:.5;pointer-events:none}:not(body):has(>.driver-active-element){overflow:hidden !important}.driver-no-interaction,.driver-no-interaction *{pointer-events:none !important}.driver-popover-footer button:hover,.driver-popover-footer button:focus{background-color:#f7f7f7}.driver-popover-navigation-btns{display:flex;flex-grow:1;justify-content:flex-end}.driver-popover-navigation-btns button+button{margin-left:4px}.driver-popover-arrow{content:"";position:absolute;border:5px solid #fff}.driver-popover-arrow-side-over{display:none}.driver-popover-arrow-side-left{left:100%;border-right-color:transparent;border-bottom-color:transparent;border-top-color:transparent}.driver-popover-arrow-side-right{right:100%;border-left-color:transparent;border-bottom-color:transparent;border-top-color:transparent}.driver-popover-arrow-side-top{top:100%;border-right-color:transparent;border-bottom-color:transparent;border-left-color:transparent}.driver-popover-arrow-side-bottom{bottom:100%;border-left-color:transparent;border-top-color:transparent;border-right-color:transparent}.driver-popover-arrow-side-center{display:none}.driver-popover-arrow-side-left.driver-popover-arrow-align-start,.driver-popover-arrow-side-right.driver-popover-arrow-align-start{top:15px}.driver-popover-arrow-side-top.driver-popover-arrow-align-start,.driver-popover-arrow-side-bottom.driver-popover-arrow-align-start{left:15px}.driver-popover-arrow-align-end.driver-popover-arrow-side-left,.driver-popover-arrow-align-end.driver-popover-arrow-side-right{bottom:15px}.driver-popover-arrow-side-top.driver-popover-arrow-align-end,.driver-popover-arrow-side-bottom.driver-popover-arrow-align-end{right:15px}.driver-popover-arrow-side-left.driver-popover-arrow-align-center,.driver-popover-arrow-side-right.driver-popover-arrow-align-center{top:50%;margin-top:-5px}.driver-popover-arrow-side-top.driver-popover-arrow-align-center,.driver-popover-arrow-side-bottom.driver-popover-arrow-align-center{left:50%;margin-left:-5px}.driver-popover-arrow-none{display:none}</style><style>.driver-active .driver-overlay,.driver-active *{pointer-events:none}.driver-active .driver-active-element,.driver-active .driver-active-element *,.driver-popover,.driver-popover *{pointer-events:auto}@keyframes animate-fade-in{0%{opacity:0}to{opacity:1}}.driver-fade .driver-overlay{animation:animate-fade-in .2s ease-in-out}.driver-fade .driver-popover{animation:animate-fade-in .2s}.driver-popover{all:unset;box-sizing:border-box;color:#2d2d2d;margin:0;padding:15px;border-radius:5px;min-width:250px;max-width:300px;box-shadow:0 1px 10px rgba(0,0,0,.4);z-index:1000000000;position:fixed;top:0;right:0;background-color:#fff}.driver-popover *{font-family:Helvetica Neue,Inter,ui-sans-serif,"Apple Color Emoji",Helvetica,Arial,sans-serif}.driver-popover-title{font:19px/normal sans-serif;font-weight:700;display:block;position:relative;line-height:1.5;zoom:1;margin:0}.driver-popover-close-btn{all:unset;position:absolute;top:0;right:0;width:32px;height:28px;cursor:pointer;font-size:18px;font-weight:500;color:#d2d2d2;z-index:1;text-align:center;transition:color;transition-duration:.2s}.driver-popover-close-btn:hover,.driver-popover-close-btn:focus{color:#2d2d2d}.driver-popover-title[style*=block]+.driver-popover-description{margin-top:5px}.driver-popover-description{margin-bottom:0;font:14px/normal sans-serif;line-height:1.5;font-weight:400;zoom:1}.driver-popover-footer{margin-top:15px;text-align:right;zoom:1;display:flex;align-items:center;justify-content:space-between}.driver-popover-progress-text{font-size:13px;font-weight:400;color:#727272;zoom:1}.driver-popover-footer button{all:unset;display:inline-block;box-sizing:border-box;padding:3px 7px;text-decoration:none;text-shadow:1px 1px 0 #fff;background-color:#fff;color:#2d2d2d;font:12px/normal sans-serif;cursor:pointer;outline:0;zoom:1;line-height:1.3;border:1px solid #ccc;border-radius:3px}.driver-popover-footer .driver-popover-btn-disabled{opacity:.5;pointer-events:none}:not(body):has(>.driver-active-element){overflow:hidden !important}.driver-no-interaction,.driver-no-interaction *{pointer-events:none !important}.driver-popover-footer button:hover,.driver-popover-footer button:focus{background-color:#f7f7f7}.driver-popover-navigation-btns{display:flex;flex-grow:1;justify-content:flex-end}.driver-popover-navigation-btns button+button{margin-left:4px}.driver-popover-arrow{content:"";position:absolute;border:5px solid #fff}.driver-popover-arrow-side-over{display:none}.driver-popover-arrow-side-left{left:100%;border-right-color:transparent;border-bottom-color:transparent;border-top-color:transparent}.driver-popover-arrow-side-right{right:100%;border-left-color:transparent;border-bottom-color:transparent;border-top-color:transparent}.driver-popover-arrow-side-top{top:100%;border-right-color:transparent;border-bottom-color:transparent;border-left-color:transparent}.driver-popover-arrow-side-bottom{bottom:100%;border-left-color:transparent;border-top-color:transparent;border-right-color:transparent}.driver-popover-arrow-side-center{display:none}.driver-popover-arrow-side-left.driver-popover-arrow-align-start,.driver-popover-arrow-side-right.driver-popover-arrow-align-start{top:15px}.driver-popover-arrow-side-top.driver-popover-arrow-align-start,.driver-popover-arrow-side-bottom.driver-popover-arrow-align-start{left:15px}.driver-popover-arrow-align-end.driver-popover-arrow-side-left,.driver-popover-arrow-align-end.driver-popover-arrow-side-right{bottom:15px}.driver-popover-arrow-side-top.driver-popover-arrow-align-end,.driver-popover-arrow-side-bottom.driver-popover-arrow-align-end{right:15px}.driver-popover-arrow-side-left.driver-popover-arrow-align-center,.driver-popover-arrow-side-right.driver-popover-arrow-align-center{top:50%;margin-top:-5px}.driver-popover-arrow-side-top.driver-popover-arrow-align-center,.driver-popover-arrow-side-bottom.driver-popover-arrow-align-center{left:50%;margin-left:-5px}.driver-popover-arrow-none{display:none}</style></head>
+<body data-new-gr-c-s-check-loaded="14.1283.0" data-gr-ext-installed="">
+<div id="app">
+  <div id="pw-screen">
+    <div class="pw-icons">📝 🔢 🌟</div>
+    <h1>Grade 1 Revision 1</h1>
+    <p class="pw-sub">Ascending &amp; Descending Order<br>Before / After / Between</p>
+    <p style="font-size:0.85em;color:#be185d;">Enter this month's password:</p>
+    <input type="text" id="pw-input" maxlength="20" placeholder="Password" autocomplete="off">
+    <br><button class="pw-btn" onclick="checkPassword()" fdprocessedid="j5s1jk">🔓 Unlock</button>
+    <div id="pw-error">❌ That's not right. Ask your teacher for this month's password.</div>
+  </div>
+
+  <div id="sound-screen">
+    <h2>🔊 Turn on Sound?</h2>
+    <p>Miss Numby will <strong>read the instructions</strong> to you!<br>Make sure your volume is up!</p>
+    <button class="snd-btn snd-on" onclick="enableSound(true)">🔊 Yes — Sound ON</button>
+    <button class="snd-btn snd-off" onclick="enableSound(false)">🔇 No — Read Only</button>
+  </div>
+
+  <div id="progress-bar"><div id="progress-fill"></div></div>
+  <div id="score-bar"></div>
+  <div id="activity-area"></div>
+
+  <div id="end-screen">
+    <h2>🎉 Well Done! 🎉</h2>
+    <div class="stars-row">⭐ 🌟 ⭐ 🌟 ⭐</div>
+    <div class="final-score" id="final-score-display"></div>
+    <p style="font-weight:700;color:var(--pink-dark);margin:8px 0;">You finished the revision activity!</p>
+    <div id="parent-end-note">
+      <strong>📋 Dear Parent / Guardian,</strong><br><br>
+      Thank you for supporting your child today! Please go through the answers that were <strong style="color:#991b1b;">incorrect (marked in red)</strong> with your child and practise those concepts together.<br><br>
+      There will be another opportunity to do a similar activity in order to practise some more. Keep up the great work! 💪<br><br>
+      <strong>Please complete the feedback form below. 📩</strong>
+    </div>
+    <a class="feedback-link" href="https://docs.google.com/forms/d/e/1FAIpQLSemC5qB2ZsXff2tgfoZMYzE0MfcZwiUQNfiY0gveCGDHvD_RA/viewform" target="_blank" rel="noopener">📝 Complete Feedback Form</a>
+    <br><br>
+    <button class="restart-btn" onclick="location.reload()">🔄 Restart</button>
+  </div>
+</div>
+
+<script>
+// ══ PASSWORD ══
+function checkPassword(){
+  var v=document.getElementById('pw-input').value.trim().toLowerCase();
+  if(v==='balmoral-april'){
+    document.getElementById('pw-screen').style.display='none';
+    document.getElementById('sound-screen').style.display='block';
+  } else {
+    document.getElementById('pw-error').style.display='block';
+    document.getElementById('pw-input').value='';
+    document.getElementById('pw-input').focus();
+  }
+}
+document.getElementById('pw-input').addEventListener('keydown',function(e){if(e.key==='Enter')checkPassword();});
+
+// ══ SOUND ══
+var soundOn=false,synth=window.speechSynthesis||null,selVoice=null;
+function enableSound(on){
+  soundOn=on;
+  document.getElementById('sound-screen').style.display='none';
+  document.getElementById('activity-area').style.display='block';
+  document.getElementById('score-bar').style.display='block';
+  if(on&&synth){pickVoice();var u=new SpeechSynthesisUtterance('');u.volume=0;synth.speak(u);}
+  startActivities();
+}
+function pickVoice(){
+  if(!synth)return;var voices=synth.getVoices();if(!voices||!voices.length){synth.onvoiceschanged=pickVoice;return;}
+  var pref=['Google UK English Female','Google US English','Samantha','Karen','Moira','Fiona','Victoria','Zira','Microsoft Zira','Tessa'];
+  for(var p=0;p<pref.length;p++){for(var v=0;v<voices.length;v++){if(voices[v].name.indexOf(pref[p])!==-1){selVoice=voices[v];return;}}}
+  for(var i=0;i<voices.length;i++){if(voices[i].lang&&voices[i].lang.indexOf('en')===0){selVoice=voices[i];return;}}
+  selVoice=voices[0];
+}
+function speak(text,cb){
+  if(!soundOn||!synth){if(cb)cb();return;}
+  synth.cancel();pickVoice();
+  var clean=text.replace(/<[^>]*>/g,'').replace(/[^\x20-\x7E.,!?;:'"()\-]/g,' ').replace(/\s+/g,' ').trim();
+  if(!clean){if(cb)cb();return;}
+  var u=new SpeechSynthesisUtterance(clean);
+  if(selVoice)u.voice=selVoice;u.rate=0.85;u.pitch=1.15;u.volume=1.0;
+  u.onend=function(){if(cb)cb();};u.onerror=function(){if(cb)cb();};
+  synth.speak(u);
+}
+function stopSpeak(){if(synth)synth.cancel();}
+
+// ══ ACTIVITY DATA ══
+var totalScore=0,totalPossible=0;
+var activities=[
+  {type:'order',dir:'asc',nums:[7,3,9,5,2],title:'Order: Smallest to Biggest',
+   instruction:'Order these numbers from <strong>smallest to biggest</strong>. Tap the numbers in the correct order!',
+   voice:'Order these numbers from smallest to biggest. Tap the numbers in the correct order. Tell your parent what you have to do before you start!'},
+  {type:'order',dir:'desc',nums:[8,4,1,7,10],title:'Order: Biggest to Smallest',
+   instruction:'Order these numbers from <strong>biggest to smallest</strong>. Tap the numbers in the correct order!',
+   voice:'Order these numbers from biggest to smallest. Tap the numbers in the correct order. Tell your parent what you have to do before you start!'},
+  {type:'order',dir:'asc',nums:[5,8,1,6,3],title:'Order: Smallest to Biggest',
+   instruction:'Order these numbers from <strong>smallest to biggest</strong>. Tap the numbers in the correct order!',
+   voice:'Order these numbers from smallest to biggest. Tap the numbers in the correct order. Tell your parent what you have to do before you start!'},
+  {type:'before',items:[8,5,2,7,1],title:'What Number Comes Before?',
+   instruction:'Type the number that comes <strong>before</strong> each number.',
+   voice:'What number comes before? Type the number that comes just before each number. Tell your parent what you have to do before you start!'},
+  {type:'between',items:[[6,8],[3,5],[0,2],[5,7],[7,9]],title:'What Number Comes Between?',
+   instruction:'Type the number that comes <strong>between</strong> the two numbers.',
+   voice:'What number comes between? Type the number that comes between the two numbers. Tell your parent what you have to do before you start!'},
+  {type:'after',items:[8,5,2,7,1],title:'What Number Comes After?',
+   instruction:'Type the number that comes <strong>after</strong> each number.',
+   voice:'What number comes after? Type the number that comes just after each number. Tell your parent what you have to do before you start!'}
+];
+var currentAct=0;
+
+function updateProgress(){
+  var pct=Math.round((currentAct/activities.length)*100);
+  document.getElementById('progress-fill').style.width=pct+'%';
+}
+function updateScoreBar(){
+  document.getElementById('score-bar').innerHTML='⭐ Score: '+totalScore+' / '+totalPossible;
+}
+
+// ══ START ══
+function startActivities(){
+  currentAct=0;totalScore=0;totalPossible=0;
+  updateScoreBar();updateProgress();
+  speak("Welcome to revision time! Miss Numby is here to help you! Let's start! Read the instructions with me!",function(){
+    loadActivity(0);
+  });
+}
+
+function loadActivity(idx){
+  if(idx>=activities.length){showEndScreen();return;}
+  currentAct=idx;updateProgress();
+  var act=activities[idx];
+  var area=document.getElementById('activity-area');
+
+  if(act.type==='order') buildOrderActivity(area,act,idx);
+  else if(act.type==='before') buildBeforeActivity(area,act,idx);
+  else if(act.type==='between') buildBetweenActivity(area,act,idx);
+  else if(act.type==='after') buildAfterActivity(area,act,idx);
+
+  // Speak instruction
+  speak(act.voice);
+}
+
+// ══ ORDERING ACTIVITY ══
+function buildOrderActivity(area,act,idx){
+  var chosen=[];
+  var h='<div class="section-title">'+act.title+'</div>';
+  h+='<div class="section-instruction">'+act.instruction+'</div>';
+  h+='<div class="num-row" id="numrow-'+idx+'">';
+  act.nums.forEach(function(n,i){
+    h+='<div class="num-chip" id="chip-'+idx+'-'+i+'" onclick="pickNum('+idx+','+i+','+n+')" data-n="'+n+'">'+n+'</div>';
+  });
+  h+='</div>';
+  h+='<div class="box-row" id="boxrow-'+idx+'">';
+  for(var b=0;b<act.nums.length;b++){
+    h+='<div class="order-box" id="obox-'+idx+'-'+b+'"></div>';
+  }
+  h+='</div>';
+  h+='<button class="undo-btn" id="undo-'+idx+'" onclick="undoNum('+idx+')">↩ Undo</button>';
+  h+='<button class="check-btn" id="checkord-'+idx+'" onclick="checkOrder('+idx+')" disabled>✅ Check</button>';
+  h+='<div id="result-'+idx+'"></div>';
+  area.innerHTML=h;
+
+  // Store state on window
+  window['orderState'+idx]={chosen:[],act:act};
+}
+
+window.pickNum=function(idx,chipIdx,num){
+  var st=window['orderState'+idx];
+  if(!st||st.locked)return;
+  var chip=document.getElementById('chip-'+idx+'-'+chipIdx);
+  if(chip.classList.contains('used'))return;
+  chip.classList.add('used');
+  st.chosen.push({chipIdx:chipIdx,num:num});
+  var boxIdx=st.chosen.length-1;
+  var box=document.getElementById('obox-'+idx+'-'+boxIdx);
+  box.textContent=num;box.classList.add('filled');
+  if(st.chosen.length===st.act.nums.length){
+    document.getElementById('checkord-'+idx).disabled=false;
+  }
+};
+
+window.undoNum=function(idx){
+  var st=window['orderState'+idx];
+  if(!st||st.locked||st.chosen.length===0)return;
+  var last=st.chosen.pop();
+  var chip=document.getElementById('chip-'+idx+'-'+last.chipIdx);
+  chip.classList.remove('used');
+  var box=document.getElementById('obox-'+idx+'-'+st.chosen.length);
+  box.textContent='';box.classList.remove('filled');
+  document.getElementById('checkord-'+idx).disabled=true;
+};
+
+window.checkOrder=function(idx){
+  var st=window['orderState'+idx];
+  if(!st||st.locked)return;
+  st.locked=true;
+  document.getElementById('checkord-'+idx).disabled=true;
+  document.getElementById('undo-'+idx).style.display='none';
+
+  var chosenNums=st.chosen.map(function(c){return c.num;});
+  var sorted=st.act.nums.slice().sort(function(a,b){return a-b;});
+  if(st.act.dir==='desc') sorted.reverse();
+
+  var correct=true;
+  for(var i=0;i<sorted.length;i++){if(chosenNums[i]!==sorted[i]){correct=false;break;}}
+
+  totalPossible+=st.act.nums.length;
+  var resEl=document.getElementById('result-'+idx);
+  if(correct){
+    totalScore+=st.act.nums.length;
+    resEl.innerHTML='<div class="result-msg result-correct">🎉 Correct! Well done!</div>';
+    speak("Correct! Well done! That is fantastic!",function(){showContinue(idx);});
+  } else {
+    // Show correct answer
+    resEl.innerHTML='<div class="result-msg result-wrong">❌ Not quite. The correct order is: <strong>'+sorted.join(', ')+'</strong></div>';
+    speak("Not quite right. The correct order is "+sorted.join(', ')+". Don't worry, you'll get another chance to practise!",function(){showContinue(idx);});
+  }
+  updateScoreBar();
+};
+
+function showContinue(idx){
+  var resEl=document.getElementById('result-'+idx);
+  resEl.innerHTML+=('<button class="continue-btn" onclick="loadActivity('+(idx+1)+')">Continue ▶</button>');
+}
+
+// ══ BEFORE ACTIVITY ══
+function buildBeforeActivity(area,act,idx){
+  var h='<div class="section-title">'+act.title+'</div>';
+  h+='<div class="section-instruction">'+act.instruction+'</div>';
+  h+='<div class="input-activity">';
+  act.items.forEach(function(n,i){
+    h+='<div class="input-row"><input type="number" class="input-box" id="bef-'+idx+'-'+i+'" data-answer="'+(n-1)+'" min="0" max="20" inputmode="numeric"> '+n+'</div>';
+  });
+  h+='</div>';
+  h+='<button class="check-all-btn" id="chkbef-'+idx+'" onclick="checkInputs(\'bef\','+idx+','+act.items.length+')">✅ Check</button>';
+  h+='<div id="result-'+idx+'"></div>';
+  area.innerHTML=h;
+}
+
+// ══ BETWEEN ACTIVITY ══
+function buildBetweenActivity(area,act,idx){
+  var h='<div class="section-title">'+act.title+'</div>';
+  h+='<div class="section-instruction">'+act.instruction+'</div>';
+  h+='<div class="input-activity">';
+  act.items.forEach(function(pair,i){
+    var ans=pair[0]+1;
+    h+='<div class="input-row">'+pair[0]+' <input type="number" class="input-box" id="btw-'+idx+'-'+i+'" data-answer="'+ans+'" min="0" max="20" inputmode="numeric"> '+pair[1]+'</div>';
+  });
+  h+='</div>';
+  h+='<button class="check-all-btn" id="chkbtw-'+idx+'" onclick="checkInputs(\'btw\','+idx+','+act.items.length+')">✅ Check</button>';
+  h+='<div id="result-'+idx+'"></div>';
+  area.innerHTML=h;
+}
+
+// ══ AFTER ACTIVITY ══
+function buildAfterActivity(area,act,idx){
+  var h='<div class="section-title">'+act.title+'</div>';
+  h+='<div class="section-instruction">'+act.instruction+'</div>';
+  h+='<div class="input-activity">';
+  act.items.forEach(function(n,i){
+    h+='<div class="input-row">'+n+' <input type="number" class="input-box" id="aft-'+idx+'-'+i+'" data-answer="'+(n+1)+'" min="0" max="20" inputmode="numeric"></div>';
+  });
+  h+='</div>';
+  h+='<button class="check-all-btn" id="chkaft-'+idx+'" onclick="checkInputs(\'aft\','+idx+','+act.items.length+')">✅ Check</button>';
+  h+='<div id="result-'+idx+'"></div>';
+  area.innerHTML=h;
+}
+
+// ══ CHECK INPUT ANSWERS ══
+window.checkInputs=function(prefix,idx,count){
+  var btn=document.getElementById('chk'+prefix+'-'+idx);
+  btn.disabled=true;
+  var correctCount=0;
+  totalPossible+=count;
+  for(var i=0;i<count;i++){
+    var inp=document.getElementById(prefix+'-'+idx+'-'+i);
+    var answer=parseInt(inp.dataset.answer);
+    var val=parseInt(inp.value);
+    inp.disabled=true;
+    if(val===answer){
+      inp.classList.add('correct');correctCount++;
+    } else {
+      inp.classList.add('wrong');
+      // Show correct answer next to wrong input
+      var corr=document.createElement('span');
+      corr.style.cssText='color:#166534;font-size:0.7em;margin-left:6px;';
+      corr.textContent='('+answer+')';
+      inp.parentNode.appendChild(corr);
+    }
+  }
+  totalScore+=correctCount;updateScoreBar();
+
+  var resEl=document.getElementById('result-'+idx);
+  if(correctCount===count){
+    resEl.innerHTML='<div class="result-msg result-correct">🎉 All correct! Excellent!</div>';
+    speak("All correct! Excellent! You are doing so well!",function(){showContinue(idx);});
+  } else {
+    resEl.innerHTML='<div class="result-msg result-wrong">You got '+correctCount+' out of '+count+' correct. The right answers are shown in green.</div>';
+    speak("You got "+correctCount+" out of "+count+" correct. Don't worry! Have a look at the correct answers with your parent.",function(){showContinue(idx);});
+  }
+};
+
+// ══ END SCREEN ══
+function showEndScreen(){
+  updateProgress();
+  document.getElementById('progress-fill').style.width='100%';
+  document.getElementById('activity-area').style.display='none';
+  document.getElementById('score-bar').style.display='none';
+  document.getElementById('end-screen').style.display='block';
+  document.getElementById('final-score-display').textContent='⭐ '+totalScore+' / '+totalPossible;
+  speak("Well done! You finished the revision activity! Ask your parent to go through the answers that were incorrect. There will be another opportunity to practise. You did a great job today!");
+}
+</script>
+
+
+<span id="PING_IFRAME_FORM_DETECTION" style="display: none;"></span><grammarly-desktop-integration data-grammarly-shadow-root="true"><template shadowrootmode="open"><style>
+      div.grammarly-desktop-integration {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        -ms-user-select:none;
+        user-select:none;
+      }
+
+      div.grammarly-desktop-integration:before {
+        content: attr(data-content);
+      }
+    </style><div aria-label="grammarly-integration" role="group" tabindex="-1" class="grammarly-desktop-integration" data-content="{&quot;mode&quot;:&quot;full&quot;,&quot;isActive&quot;:true,&quot;isUserDisabled&quot;:false}"></div></template></grammarly-desktop-integration><div id="screenity-ui"><div class="screenity-shadow-dom"><div><div class="screenity-scrollbar"></div><div class="screenity-scrollbar"></div></div><style type="text/css">
+			#screenity-ui, #screenity-ui div {
+				background-color: unset;
+				padding: unset;
+				width: unset;
+				box-shadow: unset;
+				display: unset;
+				margin: unset;
+				border-radius: unset;
+			}
+			.screenity-outline {
+				position: absolute;
+				z-index: 99999999999;
+				border: 2px solid #3080F8;
+				outline-offset: -2px;
+				pointer-events: none;
+				border-radius: 5px!important;
+			}
+		.screenity-blur {
+			filter: blur(10px)!important;
+		}
+			.screenity-shadow-dom * {
+				transition: unset;
+			}
+			.screenity-shadow-dom .TooltipContent {
+  border-radius: 30px!important;
+	background-color: #29292F!important;
+  padding: 10px 15px!important;
+  font-size: 12px;
+	margin-bottom: 10px!important;
+	bottom: 100px;
+  line-height: 1;
+	font-family: 'Satoshi-Medium', sans-serif;
+	z-index: 99999999!important;
+  color: #FFF;
+  box-shadow: hsl(206 22% 7% / 35%) 0px 10px 38px -10px, hsl(206 22% 7% / 20%) 0px 10px 20px -15px!important;
+  user-select: none;
+	transition: opacity 0.3 ease-in-out;
+  will-change: transform, opacity;
+	animation-duration: 400ms;
+  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, opacity;
+}
+
+.screenity-shadow-dom .hide-tooltip {
+	display: none!important;
+}
+
+.screenity-shadow-dom .tooltip-tall {
+	margin-bottom: 20px;
+}
+
+.screenity-shadow-dom .tooltip-small {
+	margin-bottom: 5px;
+}
+
+.screenity-shadow-dom .TooltipContent[data-state='delayed-open'][data-side='top'] {
+	animation-name: screenity-slideDownAndFade;
+}
+.screenity-shadow-dom .TooltipContent[data-state='delayed-open'][data-side='right'] {
+  animation-name: screenity-slideLeftAndFade;
+}
+.screenity-shadow-dom.TooltipContent[data-state='delayed-open'][data-side='bottom'] {
+  animation-name: screenity-slideUpAndFade;
+}
+.screenity-shadow-dom.TooltipContent[data-state='delayed-open'][data-side='left'] {
+  animation-name: screenity-slideRightAndFade;
+}
+
+@keyframes screenity-slideUpAndFade {
+  from { opacity: 0; transform: translateY(2px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes screenity-slideRightAndFade {
+  from { opacity: 0; transform: translateX(-2px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes screenity-slideDownAndFade {
+  from { opacity: 0; transform: translateY(-2px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes screenity-slideLeftAndFade {
+  from { opacity: 0; transform: translateX(2px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+#screenity-ui [data-radix-popper-content-wrapper] { z-index: 999999999999!important; }
+
+.screenity-shadow-dom .CanvasContainer {
+	position: fixed;
+	pointer-events: all!important;
+	top: 0px!important;
+	left: 0px!important;
+	z-index: 99999999999!important;
+}
+.screenity-shadow-dom .canvas {
+	position: fixed;
+	top: 0px!important;
+	left: 0px!important;
+	z-index: 99999999999!important;
+	background: transparent!important;
+}
+.screenity-shadow-dom .canvas-container {
+	top: 0px!important;
+	left: 0px!important;
+	z-index: 99999999999;
+	position: fixed!important;
+	background: transparent!important;
+}
+
+.ScreenityDropdownMenuContent {
+	z-index: 99999999999!important;
+  min-width: 200px;
+  background-color: white;
+  margin-top: 4px;
+  margin-right: 8px;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  border-radius: 15px;
+  font-family: 'Satoshi-Medium', sans-serif;
+  color: #29292F;
+  box-shadow: 0px 10px 38px -10px rgba(22, 23, 24, 0.35),
+    0px 10px 20px -15px rgba(22, 23, 24, 0.2);
+  animation-duration: 400ms;
+  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, opacity;
+}
+.ScreenityDropdownMenuContent[data-side="top"] {
+  animation-name: screenity-slideDownAndFade;
+}
+.ScreenityDropdownMenuContent[data-side="right"] {
+  animation-name: screenity-slideLeftAndFade;
+}
+.ScreenityDropdownMenuContent[data-side="bottom"] {
+  animation-name: screenity-slideUpAndFade;
+}
+.ScreenityDropdownMenuContent[data-side="left"] {
+  animation-name: screenity-slideRightAndFade;
+}
+.ScreenityItemIndicator {
+  position: absolute;
+  right: 12px;
+  width: 18px;
+  height: 18px;
+  background: #3080F8;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.ScreenityDropdownMenuItem,
+.ScreenityDropdownMenuRadioItem {
+  font-size: 14px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  height: 40px;
+  padding: 0 5px;
+  position: relative;
+  padding-left: 22px;
+  padding-right: 22px;
+  user-select: none;
+  outline: none;
+}
+.ScreenityDropdownMenuItem:hover {
+    background-color: #F6F7FB !important;
+    cursor: pointer;
+}
+.ScreenityDropdownMenuItem[data-disabled] {
+  color: #6E7684 !important;
+  cursor: not-allowed;
+  background-color: #F6F7FB !important;
+}
+
+</style></div></div></body></html>
